@@ -29,6 +29,12 @@ tasks:
         ssh-add -q "{{.CONSTRUCTOR_SSH_KEY_PATH}}"
         terraform {{ .TF_COMMAND }} {{ .CLI_ARGS }}
       EOF
+  init:
+    desc: Terraform init
+    deps:
+    - task: run_tf_command
+      vars: 
+        TF_COMMAND: init
 
   deploy:
     desc: deploy infrastructures (add "-- -auto-approve" to run)
