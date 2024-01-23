@@ -4,9 +4,9 @@ resource openstack_compute_instance_v2 instance {
   flavor_name       = var.FLAVOR_NAME
   key_pair        = var.KEYPAIR_NAME
   security_groups = [data.openstack_networking_secgroup_v2.default.name,
-                     data.openstack_networking_secgroup_v2.hub.name]
+                     data.openstack_networking_secgroup_v2.instance.name]
   network {
-    port     = openstack_networking_port_v2.hub.id
+    port     = openstack_networking_port_v2.instance.id
   }
 
   #user_data = templatefile("${path.module}/user_data.tmpl", {
@@ -19,7 +19,7 @@ resource openstack_compute_instance_v2 instance {
   connection {
     type = "ssh"
     agent = true
-    host = data.openstack_networking_floatingip_v2.hub.address
+    host = data.openstack_networking_floatingip_v2.instance.address
     user = var.REMOTE_USER
   }
   provisioner remote-exec {
@@ -28,7 +28,7 @@ resource openstack_compute_instance_v2 instance {
   #provisioner "local-exec" {
   #  environment = {
   #    REMOTE_USER = var.REMOTE_USER
-  #    REMOTE_FQDN = data.openstack_networking_floatingip_v2.hub.address
+  #    REMOTE_FQDN = data.openstack_networking_floatingip_v2.instance.address
   #  }
   #  working_dir = dirname(abspath(path.root))
   #  command = "pwd && task provisioner:install"

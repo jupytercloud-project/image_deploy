@@ -1,3 +1,3 @@
-data openstack_networking_floatingip_v2 hub {
-  description = "hub.jupyter.cloud"
+data openstack_networking_floatingip_v2 instance {
+  description = local.INSTANCE_FQDN
 }

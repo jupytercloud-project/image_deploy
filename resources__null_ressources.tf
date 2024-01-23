@@ -6,7 +6,7 @@ resource null_resource setup-base {
   connection {
     type  = "ssh"
     agent = true
-    host  = data.openstack_networking_floatingip_v2.hub.address
+    host  = data.openstack_networking_floatingip_v2.instance.address
     user  = var.REMOTE_USER
   }
   provisioner file {
@@ -31,7 +31,7 @@ resource null_resource setup-persistent-volume {
   connection {
     type  = "ssh"
     agent = true
-    host  = data.openstack_networking_floatingip_v2.hub.address
+    host  = data.openstack_networking_floatingip_v2.instance.address
     user  = var.REMOTE_USER
   }
 

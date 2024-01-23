@@ -3,7 +3,9 @@ locals {
   #TIMEZONE                = var.TIMEZONE
   #NTP_SERVERS             = jsondecode(var.NTP_SERVERS)
   #INSTANCE_FLAVOR         = var.INSTANCE_FLAVOR
-  #INSTANCE_FQDN           = var.INSTANCE_FQDN
+  INSTANCE_FQDN           = var.INSTANCE_FQDN
+  INSTANCE_SECGROUP        = var.INSTANCE_SECGROUP
+  DEFAULT_SECGROUP        = var.DEFAULT_SECGROUP
   #INSTANCE_ROLE           = var.INSTANCE_ROLE
   #SYSTEM_IMAGE            = var.SYSTEM_IMAGE
   #SYSTEM_VOLUME_SIZE      = var.SYSTEM_VOLUME_SIZE

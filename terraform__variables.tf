@@ -19,3 +19,13 @@ variable SSH_AUTHORIZED_KEYS_DIR {
 variable SSH_HOST_KEYS_DIR {
     type = string
 }
+variable INSTANCE_FQDN {
+    type = string
+}
+variable INSTANCE_SECGROUP {
+    type = string
+}
+variable DEFAULT_SECGROUP {
+    type = string
+}
+
