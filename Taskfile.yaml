@@ -16,7 +16,7 @@ tasks:
            --split-string \
            --ignore-environment \
            USER="{{.USER}}" \
-           HOME="{{.HOME}" \
+           HOME="{{.HOME}}" \
            PATH="{{.HOME}}/.pkgx/bin:/bin:/usr/bin:/usr/local/bin" \
            pkgx +gnu.org/bash^{{.BASH_VERSION}} bash \
                 --login \
@@ -76,5 +76,6 @@ tasks:
   
   get_ssh_key_path:
     desc: get ssh_key_path
-    cmds:
-      - printf '%s' "${CONSTRUCTOR_SSH_KEY_PATH}"
+    cmds: |
+      source {{.PROJECT_REPO_PATH}}/build.env
+      printf '%s' "${CONSTRUCTOR_SSH_KEY_PATH}"
