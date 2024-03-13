@@ -2,11 +2,11 @@ version: '3'
 
 tasks:
 
-  default:
-    desc: list tasks
-    silent: true
-    cmds:
-    - task --list 
+#  default:
+#    desc: list tasks
+#    silent: true
+#    cmds:
+#    - task --list 
 
   run_tf_command:
     cmds:
