@@ -76,6 +76,7 @@ tasks:
   
   get_ssh_key_path:
     desc: get ssh_key_path
-    cmds: |
+    cmds: 
+    - |
       source {{.PROJECT_REPO_PATH}}/build.env
       printf '%s' "${CONSTRUCTOR_SSH_KEY_PATH}"
