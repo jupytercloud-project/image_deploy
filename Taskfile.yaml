@@ -80,3 +80,27 @@ tasks:
     - |
       source {{.PROJECT_REPO_PATH}}/build.env
       printf '%s' "${CONSTRUCTOR_SSH_KEY_PATH}"
+  
+  ssh:
+    desc: ssh to the deployed VM
+    cmds:
+    - |
+      pkgx +gnu.org/coreutils^{{.COREUTILS_VERSION}} env \
+           --split-string \
+           --ignore-environment \
+           USER="{{.USER}}" \
+           HOME="{{.HOME}}" \
+           PATH="{{.HOME}}/.pkgx/bin:/bin:/usr/bin:/usr/local/bin" \
+           pkgx +gnu.org/bash^{{.BASH_VERSION}} bash \
+                --login \
+                --noprofile \
+                --norc \
+                - <<'EOF'
+                source {{.PROJECT_REPO_PATH}}/build.env
+                eval "$(pkgx +openssh.com^{{.OPENSSH_VERSION}} ssh-agent)" 2>&1 > /dev/null
+                pkgx +openssh.com^{{.OPENSSH_VERSION}} \
+                     ssh-add -q "${CONSTRUCTOR_SSH_KEY_PATH}" 2>&1 > /dev/null
+                pkgx +openssh^{{OPENSSH_VERSION}} \
+                     ssh -l ${REMOTE_USER} ${REMOTE_FQDN}
+                pkgx +openssh.com^{{.OPENSSH_VERSION}} \
+                     ssh-agent -k      
