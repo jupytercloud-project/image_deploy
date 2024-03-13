@@ -1,33 +1,38 @@
 version: '3'
 
+env:
+  COUTILS_VERSION: '9.4'
+  BASH_VERSION: '5'
+  OPENSSH_VERSION: '9.7'
+  PROVISIONER_REPO_PATH: '{{.TASKFILE_DIR}}'
+  PROJECT_REPO_PATH: '{{.ROOT_DIR}}' 
+  
 tasks:
-
-#  default:
-#    desc: list tasks
-#    silent: true
-#    cmds:
-#    - task --list 
 
   run_tf_command:
     cmds:
     - |
-      pkgx +gnu.org/coreutils env \
+      pkgx +gnu.org/coreutils^{{.COREUTILS_VERSION}} env \
            --split-string \
            --ignore-environment \
-           USER="${USER}" \
-           HOME="${HOME}" \
-           CONSTRUCTOR_SSH_KEY_PATH="${CONSTRUCTOR_SSH_KEY_PATH}" \
-           PATH="${HOME}/.pkgx/bin:/bin:/usr/bin:/usr/local/bin" \
-           pkgx +gnu.org/bash^5 bash \
+           USER="{{.USER}}" \
+           HOME="{{.HOME}" \
+           CONSTRUCTOR_SSH_KEY_PATH="{{.CONSTRUCTOR_SSH_KEY_PATH}}" \
+           PATH="{{.HOME}}/.pkgx/bin:/bin:/usr/bin:/usr/local/bin" \
+           pkgx +gnu.org/bash^{{.BASH_VERSION}} bash \
                 --login \
                 --noprofile \
                 --norc \
                 - <<'EOF'
-        eval "$(pkgx --shellcode)" 2&>1 > /dev/null
-        source ../Taskfile.env
-        eval "$(ssh-agent)" 2&>1 > /dev/null
-        ssh-add -q "{{.CONSTRUCTOR_SSH_KEY_PATH}}"
-        terraform {{ .TF_COMMAND }} {{ .CLI_ARGS }}
+                source {{.PROJECT_REPO_PATH}}/build.env
+                eval "$(pkgx +openssh.com^{{OPENSSH_VERSION}} ssh-agent)" \
+                     2&>1 > /dev/null
+                pkgx +openssh.com^{{.OPENSSH_VERSION}} ssh-add \
+                     -q "{{.CONSTRUCTOR_SSH_KEY_PATH}}"
+                pkgx +openssh.com^{{.OPENSSH_VERSION}} terraform \
+                     {{ .TF_COMMAND }} {{ .CLI_ARGS }}
+                pkgx +openssh.com^{{.OPENSSH_VERSION}} ssh-agent\
+                     -k
       EOF
   init:
     desc: Terraform init
