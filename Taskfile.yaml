@@ -24,7 +24,7 @@ tasks:
                 --norc \
                 - <<'EOF'
                 source {{.PROJECT_REPO_PATH}}/build.env
-                eval "$(pkgx +openssh.com^{{.OPENSSH_VERSION}} ssh-agent)" 2&>1 > /dev/null
+                eval "$(pkgx +openssh.com^{{.OPENSSH_VERSION}} ssh-agent)" 2>&1 > /dev/null
                 pkgx +openssh.com^{{.OPENSSH_VERSION}} \
                      ssh-add -q "${CONSTRUCTOR_SSH_KEY_PATH}"
                 pkgx +openssh.com^{{.OPENSSH_VERSION}} \
