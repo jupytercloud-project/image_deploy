@@ -5,7 +5,7 @@ resource terraform_data setup-base {
   ]
 
   #triggers_replace = openstack_compute_volume_attach_v2.persistent-volume.[*].id
-  triggers_replace = openstack_compute_volume_attach_v2.persistent-volumes.[*].id
+  triggers_replace = openstack_compute_volume_attach_v2.persistent-volumes[*].id
 
   connection {
     type  = "ssh"
