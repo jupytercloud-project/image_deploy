@@ -1,11 +1,10 @@
 
 resource terraform_data setup-base {
+  triggers_replace = openstack_compute_volume_attach_v2.persistent-volumes[*]
+
   depends_on = [
     openstack_compute_volume_attach_v2.persistent-volumes
   ]
-
-  #triggers_replace = openstack_compute_volume_attach_v2.persistent-volume.[*].id
-  triggers_replace = openstack_compute_volume_attach_v2.persistent-volumes[*]
 
   connection {
     type  = "ssh"
@@ -26,11 +25,11 @@ resource terraform_data setup-base {
 } 
 
 resource terraform_data setup-persistent-volume {
+  triggers_replace = openstack_compute_volume_attach_v2.persistent-volumes[*]
+
   depends_on = [
     terraform_data.setup-base
   ]
-
-  triggers_replace = openstack_compute_volume_attach_v2.persistent-volumes[*]
 
   for_each = data.openstack_blockstorage_volume_v3.persistent-volumes
 
@@ -54,11 +53,12 @@ resource terraform_data setup-persistent-volume {
 }
 
 resource terraform_data exec-provisioner-tasks {
+  triggers_replace = openstack_compute_volume_attach_v2.persistent-volumes[*]
+
   depends_on = [
     terraform_data.setup-persistent-volume
   ]
 
-  triggers_replace = openstack_compute_volume_attach_v2.persistent-volumes[*]
   provisioner local-exec {
     command = "bash local/scripts/exec_provisioner_tasks.bash"
   }
