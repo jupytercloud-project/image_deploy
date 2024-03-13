@@ -30,6 +30,8 @@ resource terraform_data setup-persistent-volume {
     openstack_compute_volume_attach_v2.persistent-volumes
   ]
 
+  triggers_replace = openstack_compute_volume_attach_v2.persistent-volumes[*]
+
   for_each = data.openstack_blockstorage_volume_v3.persistent-volumes
 
   connection {
@@ -56,6 +58,7 @@ resource terraform_data exec-provisioner-tasks {
     terraform_data.setup-persistent-volume
   ]
 
+  triggers_replace = openstack_compute_volume_attach_v2.persistent-volumes[*]
   provisioner local-exec {
     command = "bash local/scripts/exec_provisioner_tasks.bash"
   }
