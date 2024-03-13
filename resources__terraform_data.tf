@@ -1,5 +1,5 @@
 
-resource null_resource setup-base {
+resource terraform_data setup-base {
   depends_on = [
     openstack_compute_volume_attach_v2.persistent-volumes
   ]
@@ -21,7 +21,7 @@ resource null_resource setup-base {
   }
 } 
 
-resource null_resource setup-persistent-volume {
+resource terraform_data setup-persistent-volume {
   depends_on = [
     openstack_compute_volume_attach_v2.persistent-volumes
   ]
@@ -47,7 +47,7 @@ resource null_resource setup-persistent-volume {
   }
 }
 
-resource null_resource exec-provisioner-tasks {
+resource terraform_data exec-provisioner-tasks {
   depends_on = [
     null_resource.setup-persistent-volume
   ]
