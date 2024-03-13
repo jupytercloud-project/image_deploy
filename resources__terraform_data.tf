@@ -27,7 +27,7 @@ resource terraform_data setup-base {
 
 resource terraform_data setup-persistent-volume {
   depends_on = [
-    openstack_compute_volume_attach_v2.persistent-volumes
+    terraform_data.setup-base
   ]
 
   triggers_replace = openstack_compute_volume_attach_v2.persistent-volumes[*]
