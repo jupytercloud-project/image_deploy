@@ -25,14 +25,13 @@ tasks:
                 --norc \
                 - <<'EOF'
                 source {{.PROJECT_REPO_PATH}}/build.env
-                eval "$(pkgx +openssh.com^{{OPENSSH_VERSION}} ssh-agent)" \
-                     2&>1 > /dev/null
-                pkgx +openssh.com^{{.OPENSSH_VERSION}} ssh-add \
-                     -q "{{.CONSTRUCTOR_SSH_KEY_PATH}}"
-                pkgx +openssh.com^{{.OPENSSH_VERSION}} terraform \
-                     {{ .TF_COMMAND }} {{ .CLI_ARGS }}
-                pkgx +openssh.com^{{.OPENSSH_VERSION}} ssh-agent\
-                     -k
+                eval "$(pkgx +openssh.com^{{.OPENSSH_VERSION}} ssh-agent)" 2&>1 > /dev/null
+                pkgx +openssh.com^{{.OPENSSH_VERSION}} \
+                     ssh-add -q "{{.CONSTRUCTOR_SSH_KEY_PATH}}"
+                pkgx +openssh.com^{{.OPENSSH_VERSION}} \
+                     terraform {{ .TF_COMMAND }} {{ .CLI_ARGS }}
+                pkgx +openssh.com^{{.OPENSSH_VERSION}} \
+                     ssh-agent -k
       EOF
   init:
     desc: Terraform init
