@@ -104,4 +104,4 @@ tasks:
                 pkgx +openssh^{{.OPENSSH_VERSION}} \
                      ssh -l ${REMOTE_USER} ${REMOTE_FQDN}
                 pkgx +openssh.com^{{.OPENSSH_VERSION}} \
-                     ssh-agent -k      
+                     ssh-agent -k 2>&1 > /dev/null
