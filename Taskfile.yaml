@@ -4,6 +4,7 @@ env:
   COUTILS_VERSION: '9.4'
   BASH_VERSION: '5'
   OPENSSH_VERSION: '9.7'
+  TERRAFORM_VERSION: '1.7'
   PROVISIONER_REPO_PATH: '{{.TASKFILE_DIR}}'
   PROJECT_REPO_PATH: '{{.ROOT_DIR}}' 
   
@@ -27,7 +28,7 @@ tasks:
                 eval "$(pkgx +openssh.com^{{.OPENSSH_VERSION}} ssh-agent)" 2>&1 > /dev/null
                 pkgx +openssh.com^{{.OPENSSH_VERSION}} \
                      ssh-add -q "${CONSTRUCTOR_SSH_KEY_PATH}" 2>&1 > /dev/null
-                pkgx +openssh.com^{{.OPENSSH_VERSION}} \
+                pkgx +terraform.io^{{.TERRAFORM_VERSION}} \
                      terraform {{.TF_COMMAND}} {{.CLI_ARGS}}
                 pkgx +openssh.com^{{.OPENSSH_VERSION}} \
                      ssh-agent -k
