@@ -17,7 +17,6 @@ tasks:
            --ignore-environment \
            USER="{{.USER}}" \
            HOME="{{.HOME}" \
-           CONSTRUCTOR_SSH_KEY_PATH="{{.CONSTRUCTOR_SSH_KEY_PATH}}" \
            PATH="{{.HOME}}/.pkgx/bin:/bin:/usr/bin:/usr/local/bin" \
            pkgx +gnu.org/bash^{{.BASH_VERSION}} bash \
                 --login \
@@ -27,9 +26,9 @@ tasks:
                 source {{.PROJECT_REPO_PATH}}/build.env
                 eval "$(pkgx +openssh.com^{{.OPENSSH_VERSION}} ssh-agent)" 2&>1 > /dev/null
                 pkgx +openssh.com^{{.OPENSSH_VERSION}} \
-                     ssh-add -q "{{.CONSTRUCTOR_SSH_KEY_PATH}}"
+                     ssh-add -q "${CONSTRUCTOR_SSH_KEY_PATH}"
                 pkgx +openssh.com^{{.OPENSSH_VERSION}} \
-                     terraform {{ .TF_COMMAND }} {{ .CLI_ARGS }}
+                     terraform {{.TF_COMMAND}} {{.CLI_ARGS}}
                 pkgx +openssh.com^{{.OPENSSH_VERSION}} \
                      ssh-agent -k
       EOF
