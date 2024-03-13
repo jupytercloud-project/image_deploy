@@ -3,9 +3,12 @@ resource terraform_data setup-base {
   depends_on = [
     openstack_compute_volume_attach_v2.persistent-volumes
   ]
-  triggers_replace = [
-    openstack_compute_volume_attach_v2.persistent-volumes.*.id
-  ]
+  lifecycle {
+    replace_triggered_by = [
+      openstack_compute_volume_attach_v2.persistent-volume[each.key]
+    ]
+  }
+
   connection {
     type  = "ssh"
     agent = true
@@ -27,9 +30,6 @@ resource terraform_data setup-base {
 resource terraform_data setup-persistent-volume {
   depends_on = [
     openstack_compute_volume_attach_v2.persistent-volumes
-  ]
-  triggers_replace = [
-    openstack_compute_volume_attach_v2.persistent-volumes.*.id
   ]
 
   for_each = data.openstack_blockstorage_volume_v3.persistent-volumes
