@@ -1,7 +1,7 @@
 resource openstack_compute_instance_v2 instance {
-  name            = "jupyterhub"
+  name            = var.INSTANCE_FQDN
   image_id        = data.openstack_images_image_v2.base_image.id
-  flavor_name       = var.FLAVOR_NAME
+  flavor_name     = var.FLAVOR_NAME
   key_pair        = var.KEYPAIR_NAME
   security_groups = [data.openstack_networking_secgroup_v2.default.name,
                      data.openstack_networking_secgroup_v2.instance.name]
