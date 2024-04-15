@@ -101,7 +101,8 @@ tasks:
                 eval "$(pkgx +openssh.com^{{.OPENSSH_VERSION}} ssh-agent)" 2>&1 > /dev/null
                 pkgx +openssh.com^{{.OPENSSH_VERSION}} \
                      ssh-add -q "${CONSTRUCTOR_SSH_KEY_PATH}" 2>&1 > /dev/null
-                pkgx +openssh^{{.OPENSSH_VERSION}} \
+                pkgx +openssh.com^{{.OPENSSH_VERSION}} \
                      ssh -l ${REMOTE_USER} ${REMOTE_FQDN}
                 pkgx +openssh.com^{{.OPENSSH_VERSION}} \
                      ssh-agent -k 2>&1 > /dev/null
+      EOF
