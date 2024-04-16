@@ -82,27 +82,37 @@ tasks:
       source {{.PROJECT_REPO_PATH}}/build.env
       printf '%s' "${CONSTRUCTOR_SSH_KEY_PATH}"
   
+  #
+  # ssh connect with a valid pkgx environment
+  # 
+  __ssh:
+    cmds:
+    - |
+
+        source {{.PROJECT_REPO_PATH}}/build.env
+        eval "$(ssh-agent)" 2>&1 > /dev/null
+        ssh-add -q "${CONSTRUCTOR_SSH_KEY_PATH}" 2>&1 > /dev/null
+        ssh -tt \
+            -o RequestTTY=yes \
+            -l ${REMOTE_USER} \
+            ${REMOTE_FQDN}
+        ssh-agent -k 2>&1 > /dev/null
+
+  #
+  # setup pkgx environment for internal ssh task calling
+  #
   ssh:
     desc: ssh to the deployed VM
     cmds:
     - |
-      pkgx +gnu.org/coreutils^{{.COREUTILS_VERSION}} env \
+
+        pkgx +gnu.org/coreutils^{{.COREUTILS_VERSION}} env \
            --split-string \
            --ignore-environment \
            USER="{{.USER}}" \
            HOME="{{.HOME}}" \
            PATH="{{.HOME}}/.pkgx/bin:/bin:/usr/bin:/usr/local/bin" \
-           pkgx +gnu.org/bash^{{.BASH_VERSION}} bash \
-                --login \
-                --noprofile \
-                --norc \
-                - <<'EOF'
-                source {{.PROJECT_REPO_PATH}}/build.env
-                eval "$(pkgx +openssh.com^{{.OPENSSH_VERSION}} ssh-agent)" 2>&1 > /dev/null
-                pkgx +openssh.com^{{.OPENSSH_VERSION}} \
-                     ssh-add -q "${CONSTRUCTOR_SSH_KEY_PATH}" 2>&1 > /dev/null
-                pkgx +openssh.com^{{.OPENSSH_VERSION}} \
-                     ssh -l ${REMOTE_USER} ${REMOTE_FQDN}
-                pkgx +openssh.com^{{.OPENSSH_VERSION}} \
-                     ssh-agent -k 2>&1 > /dev/null
-      EOF
+           pkgx +gnu.org/bash^{{.BASH_VERSION}} \
+                +openssh.com^{{.OPENSSH_VERSION}} \
+                task --taskfile {{.PROJECT_REPO_PATH}}/Taskfile.yaml \
+                     constructor:__ssh
