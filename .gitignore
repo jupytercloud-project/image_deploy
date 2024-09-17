@@ -4,3 +4,4 @@ clouds.yaml
 terraform.tfstate
 terraform.tfstate.backup
 .terraform/
+.vscode
