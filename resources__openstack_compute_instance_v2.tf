@@ -1,3 +1,13 @@
+resource openstack_blockstorage_volume_v3 persistent-volumes {
+  for_each = local.PERSISTENT_VOLUMES_NAME
+  name = each.value
+  size = 77
+}
+
+resource openstack_networking_floatingip_v2 instance {
+  pool = "public-2"
+}
+
 resource openstack_compute_instance_v2 instance {
   name            = var.INSTANCE_FQDN
   image_id        = data.openstack_images_image_v2.base_image.id
@@ -9,30 +19,15 @@ resource openstack_compute_instance_v2 instance {
     port     = openstack_networking_port_v2.instance.id
   }
 
-  #user_data = templatefile("${path.module}/user_data.tmpl", {
-  #  fqdn = local.INSTANCE_FQDN
-  #  timezone = local.TIMEZONE
-  #  ntp_servers = local.NTP_SERVERS
-  #  ssh_authorized_keys = data.external.ssh_authorized_keys.result
-  #  ssh_host_keys = data.external.ssh_host_keys.result
-  #})
   connection {
     type = "ssh"
     agent = true
-    host = data.openstack_networking_floatingip_v2.instance.address
+    host = openstack_networking_floatingip_v2.instance.address
     user = var.REMOTE_USER
   }
   provisioner remote-exec {
     inline = [ "hostname" ]
   }
-  #provisioner "local-exec" {
-  #  environment = {
-  #    REMOTE_USER = var.REMOTE_USER
-  #    REMOTE_FQDN = data.openstack_networking_floatingip_v2.instance.address
-  #  }
-  #  working_dir = dirname(abspath(path.root))
-  #  command = "pwd && task provisioner:install"
-  #
-  #}
 
 }
+
