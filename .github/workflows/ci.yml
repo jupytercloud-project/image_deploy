@@ -1,0 +1,40 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+
+      # -backend=false because nothing here should reach for state or
+      # credentials to be checked. It still resolves the provider
+      # constraints, which is what a provider version bump changes.
+      - name: Init (providers only)
+        run: terraform init -backend=false -input=false
+
+      - name: Validate
+        run: terraform validate
+
+      # Reported, not gated: these trees are not all `terraform fmt` clean,
+      # and gating would make the lane red on arrival for a reason that has
+      # nothing to do with the change under review.
+      - name: fmt (advisory)
+        continue-on-error: true
+        run: terraform fmt -check -recursive -diff
