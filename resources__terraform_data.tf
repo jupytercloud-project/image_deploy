@@ -9,7 +9,7 @@ resource terraform_data setup-base {
   connection {
     type  = "ssh"
     agent = true
-    host  = data.openstack_networking_floatingip_v2.instance.address
+    host  = openstack_networking_floatingip_v2.instance.address
     user  = var.REMOTE_USER
   }
   provisioner file {
@@ -31,12 +31,12 @@ resource terraform_data setup-persistent-volume {
     terraform_data.setup-base
   ]
 
-  for_each = data.openstack_blockstorage_volume_v3.persistent-volumes
+  for_each = openstack_blockstorage_volume_v3.persistent-volumes
 
   connection {
     type  = "ssh"
     agent = true
-    host  = data.openstack_networking_floatingip_v2.instance.address
+    host  = openstack_networking_floatingip_v2.instance.address
     user  = var.REMOTE_USER
   }
 

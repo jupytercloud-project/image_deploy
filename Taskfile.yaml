@@ -55,7 +55,7 @@ tasks:
         TF_COMMAND: destroy
 
   plan:
-    desc: get remote_fqdn
+    desc: plan
     deps:
     - task: run_tf_command
       vars: 
@@ -69,7 +69,7 @@ tasks:
         TF_COMMAND: output -raw REMOTE_FQDN
 
   get_remote_user:
-    desc: get remote_fqdn
+    desc: get remote_user
     deps:
     - task: run_tf_command
       vars: 

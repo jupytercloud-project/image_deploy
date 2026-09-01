@@ -22,6 +22,9 @@ variable SSH_HOST_KEYS_DIR {
 variable INSTANCE_FQDN {
     type = string
 }
+variable INSTANCE_NETWORK {
+    type = string
+}
 variable INSTANCE_SECGROUP {
     type = string
 }
